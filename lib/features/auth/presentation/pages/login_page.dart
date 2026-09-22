@@ -25,27 +25,27 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login() {
     context.read<LoginBloc>().add(
-      LoginSubmitted(
-        email: emailController.text.trim(),
-        password: passwordController.text,
-      ),
-    );
+          LoginSubmitted(
+            email: emailController.text.trim(),
+            password: passwordController.text,
+          ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state.status == LoginStatus.success) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Login successful'),
+                SnackBar(
+                  content: Text(
+                    'Login successful: ${state.user?.name}',
+                  ),
                 ),
               );
             }
@@ -61,8 +61,7 @@ class _LoginPageState extends State<LoginPage> {
             }
           },
           builder: (context, state) {
-            final isLoading =
-                state.status == LoginStatus.loading;
+            final isLoading = state.status == LoginStatus.loading;
 
             return Column(
               children: [
@@ -73,9 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Email',
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 TextField(
                   controller: passwordController,
                   obscureText: true,
@@ -83,15 +80,19 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Password',
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: isLoading ? null : _login,
                     child: isLoading
-                        ? const CircularProgressIndicator()
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
                         : const Text('Login'),
                   ),
                 ),

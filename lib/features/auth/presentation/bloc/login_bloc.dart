@@ -3,25 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/login.dart';
 import 'login_event.dart';
 import 'login_state.dart';
-// Event
-// ↓
-// Loading
-// ↓
-// UseCase
-// ↓
-// Success / Failure
+
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final Login login;
 
-  LoginBloc(this.login)
-      : super(const LoginState()) {
+  LoginBloc(this.login) : super(const LoginState()) {
     on<LoginSubmitted>(_onLoginSubmitted);
   }
 
   Future<void> _onLoginSubmitted(
-      LoginSubmitted event,
-      Emitter<LoginState> emit,
-      ) async {
+    LoginSubmitted event,
+    Emitter<LoginState> emit,
+  ) async {
     emit(
       state.copyWith(
         status: LoginStatus.loading,
@@ -30,10 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
 
     try {
-      final user = await login(
-        event.email,
-        event.password,
-      );
+      final user = await login(event.email, event.password);
 
       emit(
         state.copyWith(

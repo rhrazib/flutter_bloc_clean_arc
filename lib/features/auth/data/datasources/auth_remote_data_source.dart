@@ -7,10 +7,7 @@ import '../models/login_response_model.dart';
 // Business logic এখানে রাখব না।
 
 abstract class AuthRemoteDataSource {
-  Future<LoginResponseModel> login(
-    String email,
-    String password,
-  );
+  Future<LoginResponseModel> login(String email, String password);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -19,7 +16,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<LoginResponseModel> login(String email, String password) async {
+  Future<LoginResponseModel> login(
+    String email,
+    String password,
+  ) async {
     final response = await dio.post(
       '/login',
       data: {
@@ -28,6 +28,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       },
     );
 
-    return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
+    return LoginResponseModel.fromJson(
+      Map<String, dynamic>.from(response.data as Map),
+    );
   }
 }
